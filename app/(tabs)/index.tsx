@@ -1,75 +1,334 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+/*import React, { useState } from "react";
+import { Button, FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
 
-export default function HomeScreen() {
+
+const [pessoas, setPessoas] = useState<Pessoa[]>([]);
+
+
+export default function App() {
+  const [nome, setNome] = useState("");
+  const [email, setEmail] = useState("");
+  const [pessoas, setPessoas] = useState([]);
+  const [editIndex, setEditIndex] = useState(null);
+
+  // Adicionar ou Editar pessoa
+  const adicionarPessoa = () => {
+    if (nome.trim() === "" || email.trim() === "") return;
+
+    if (editIndex !== null) {
+      const novaLista = [...pessoas];
+      novaLista[editIndex] = { nome, email };
+      setPessoas(novaLista);
+      setEditIndex(null);
+    } else {
+      setPessoas([...pessoas, { nome, email }]);
+    }
+
+    console.log("Lista atualizada:", [...pessoas, { nome, email }]);
+    setNome("");
+    setEmail("");
+  };
+
+  // Remover pessoa
+  const removerPessoa = (index) => {
+    const novaLista = pessoas.filter((_, i) => i !== index);
+    setPessoas(novaLista);
+    console.log("Lista após remover:", novaLista);
+  };
+
+  // Editar pessoa
+  const editarPessoa = (index) => {
+    setNome(pessoas[index].nome);
+    setEmail(pessoas[index].email);
+    setEditIndex(index);
+  };
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
+    <View style={styles.container}>
+      <Text style={styles.title}>Formulário de Pessoas</Text>
+
+      <TextInput
+        style={styles.input}
+        placeholder="Nome"
+        value={nome}
+        onChangeText={setNome}
+      />
+
+      <TextInput
+        style={styles.input}
+        placeholder="Email"
+        value={email}
+        onChangeText={setEmail}
+      />
+
+      <Button
+        title={editIndex !== null ? "Salvar Edição" : "Adicionar"}
+        onPress={adicionarPessoa}
+      />
+
+      {pessoas.length === 0 ? (
+        <Text style={styles.empty}>A lista está vazia</Text>
+      ) : (
+        <FlatList
+          data={pessoas}
+          keyExtractor={(_, index) => index.toString()}
+          renderItem={({ item, index }) => (
+            <View
+              style={[
+                styles.item,
+                { backgroundColor: index % 2 === 0 ? "#f2f2f2" : "#ffffff" }, 
+              ]}
+            >
+              <Text style={styles.text}>
+                {item.nome} - {item.email}
+              </Text>
+              <View style={styles.actions}>
+                <TouchableOpacity onPress={() => editarPessoa(index)}>
+                  <Text style={styles.edit}>Editar</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => removerPessoa(index)}>
+                  <Text style={styles.remove}>Remover</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          )}
         />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+      )}
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
+  container: {
+    flex: 1,
+    padding: 20,
+    marginTop: 50,
   },
-  stepContainer: {
-    gap: 8,
+  title: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 15,
+    textAlign: "center",
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    padding: 8,
+    marginBottom: 10,
+    borderRadius: 5,
+  },
+  empty: {
+    marginTop: 20,
+    textAlign: "center",
+    fontStyle: "italic",
+    color: "gray",
+  },
+  item: {
+    padding: 12,
+    marginVertical: 4,
+    borderRadius: 5,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  text: {
+    fontSize: 16,
+  },
+  actions: {
+    flexDirection: "row",
+    gap: 10,
+  },
+  edit: {
+    color: "blue",
+    marginRight: 10,
+  },
+  remove: {
+    color: "red",
+  },
+});*/
+
+
+
+
+import React, { useState } from "react";
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
+
+interface Pessoa {
+  id: string;
+  nome: string;
+  email: string;
+}
+
+export default function App() {
+  const [nome, setNome] = useState("");
+  const [email, setEmail] = useState("");
+  const [pessoas, setPessoas] = useState<Pessoa[]>([]);
+  const [editandoId, setEditandoId] = useState<string | null>(null);
+
+  const adicionarOuEditarPessoa = () => {
+    if (!nome || !email) return;
+
+    if (editandoId) {
+      setPessoas((prev) =>
+        prev.map((p) =>
+          p.id === editandoId ? { ...p, nome: nome, email: email } : p
+        )
+      );
+      setEditandoId(null);
+    } else {
+      const novaPessoa: Pessoa = {
+        id: Date.now().toString(),
+        nome,
+        email,
+      };
+      setPessoas([...pessoas, novaPessoa]);
+    }
+    setNome("");
+    setEmail("");
+  };
+
+  const removerPessoa = (id: string) => {
+    setPessoas((prev) => prev.filter((p) => p.id !== id));
+  };
+
+  const editarPessoa = (pessoa: Pessoa) => {
+    setNome(pessoa.nome);
+    setEmail(pessoa.email);
+    setEditandoId(pessoa.id);
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.titulo}>Cadastro de Pessoas</Text>
+
+      <TextInput
+        style={styles.input}
+        placeholder="Nome"
+        placeholderTextColor="#888"
+        value={nome}
+        onChangeText={setNome}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Email"
+        placeholderTextColor="#888"
+        value={email}
+        onChangeText={setEmail}
+        keyboardType="email-address"
+      />
+
+      <TouchableOpacity style={styles.botao} onPress={adicionarOuEditarPessoa}>
+        <Text style={styles.textoBotao}>
+          {editandoId ? "Salvar Alterações" : "Adicionar ⚠️"}
+        </Text>
+      </TouchableOpacity>
+
+      {pessoas.length === 0 ? (
+        <Text style={styles.vazio}>A lista está vazia...</Text>
+      ) : (
+        <FlatList
+          data={pessoas}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item, index }) => (
+            <View
+              style={[
+                styles.item,
+                { backgroundColor: index % 2 === 0 ? "#f2f2f2" : "#ffffff" }, // zebra clara
+              ]}
+            >
+              <View style={{ flex: 1 }}>
+                <Text style={styles.textoItem}>{item.nome}</Text>
+                <Text style={styles.textoEmail}>{item.email}</Text>
+              </View>
+              <TouchableOpacity
+                style={[styles.botaoAcao, { backgroundColor: "#4caf50" }]}
+                onPress={() => editarPessoa(item)}
+              >
+                <Text style={styles.textoBotao}>Editar</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.botaoAcao, { backgroundColor: "#f44336" }]}
+                onPress={() => removerPessoa(item.id)}
+              >
+                <Text style={styles.textoBotao}>Excluir</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        />
+      )}
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    marginTop: 40,
+    backgroundColor: "#ffffff", // fundo branco
+  },
+  titulo: {
+    fontSize: 22,
+    fontWeight: "bold",
+    marginBottom: 20,
+    textAlign: "center",
+    color: "#000", // texto preto
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 8,
+    padding: 10,
+    marginBottom: 10,
+    backgroundColor: "#fff",
+    color: "#000",
+  },
+  botao: {
+    backgroundColor: "#007bff",
+    padding: 12,
+    borderRadius: 8,
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  textoBotao: {
+    color: "#fff",
+    fontWeight: "bold",
+  },
+  vazio: {
+    textAlign: "center",
+    marginTop: 20,
+    fontStyle: "italic",
+    color: "#666",
+  },
+  item: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 15,
+    borderRadius: 8,
     marginBottom: 8,
+    borderWidth: 1,
+    borderColor: "#ddd",
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  textoItem: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#000",
+  },
+  textoEmail: {
+    fontSize: 14,
+    color: "#444",
+  },
+  botaoAcao: {
+    padding: 8,
+    borderRadius: 6,
+    marginLeft: 8,
   },
 });
