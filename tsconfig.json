@@ -3,10 +3,11 @@
   "compilerOptions": {
     "strict": true,
     "paths": {
-      "@/*": [
-        "./*"
-      ]
-    }
+      "@/*": ["./*"]
+    },
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true
   },
   "include": [
     "**/*.ts",
@@ -15,3 +16,4 @@
     "expo-env.d.ts"
   ]
 }
+
