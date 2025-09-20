@@ -4,15 +4,16 @@
     "nome": "Maria Silva",
     "email": "maria@email.com",
     "ano": "1998",
-    "descricao": "Estudante de TI",
+    "descricao": "Estudante de Design",
     "imagem": "https://randomuser.me/api/portraits/women/44.jpg"
   },
   {
     "id": "2",
     "nome": "João Santos",
     "email": "joao@email.com",
-    "ano": "2000",
-    "descricao": "Engenheiro de Software",
+    "ano": "1995",
+    "descricao": "Desenvolvedor Frontend",
     "imagem": "https://randomuser.me/api/portraits/men/32.jpg"
   }
 ]
+

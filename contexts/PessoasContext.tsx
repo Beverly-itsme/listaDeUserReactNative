@@ -1,6 +1,6 @@
 // contexts/PessoasContext.tsx
 import React, { createContext, useContext, useState, ReactNode } from "react";
-import pessoasJson from "../data/pessoas.json"; // 👈 importar JSON
+import pessoasJson from "../data/pessoas.json"; // importar JSON
 
 export interface Pessoa {
   id: string;
@@ -21,7 +21,7 @@ type ContextType = {
 const PessoasContext = createContext<ContextType | undefined>(undefined);
 
 export const PessoasProvider = ({ children }: { children: ReactNode }) => {
-  const [pessoas, setPessoas] = useState<Pessoa[]>(pessoasJson); // 👈 inicializa com JSON
+  const [pessoas, setPessoas] = useState<Pessoa[]>(pessoasJson); //  inicializa com JSON
 
   const addPessoa = (p: Pessoa) => setPessoas((prev) => [...prev, p]);
   const updatePessoa = (p: Pessoa) =>
